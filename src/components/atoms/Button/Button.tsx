@@ -25,6 +25,10 @@ const buttonVariants = cva(
           bg-subscription text-black
           hover:bg-subscription/80
         `,
+        disabled: `
+          bg-neutral-low-contrast
+          hover:cursor-not-allowed
+        `,
       },
       size: {
         default: `

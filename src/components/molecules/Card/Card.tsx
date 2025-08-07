@@ -6,7 +6,7 @@ import { Newsletter } from '@/types';
 
 interface CardProps extends Omit<Newsletter, 'id'>, Omit<React.ComponentProps<'div'>, 'title'> {}
 
-export function Card({ imageUrl, title, description, isSubscribed, className }: CardProps) {
+export function Card({ imageUrl, title, description, isAccessible, className }: CardProps) {
   return (
     <div
       className={cn(
@@ -30,7 +30,7 @@ export function Card({ imageUrl, title, description, isSubscribed, className }: 
       </div>
       <div className="text-center">{description}</div>
       <div>
-        <Button variant={isSubscribed ? 'default' : 'subscription'}>{isSubscribed ? "S'inscrire" : "S'abonner"}</Button>
+        <Button variant={isAccessible ? 'default' : 'subscription'}>{isAccessible ? "S'inscrire" : "S'abonner"}</Button>
       </div>
     </div>
   );

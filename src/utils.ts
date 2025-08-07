@@ -1,6 +1,9 @@
+import { decodeJwt } from 'jose';
 import { cookies, headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 import { USER_COOKIE_NAME } from '@/constants/server';
+import { User } from '@/types';
 
 export async function fetchWithAuth<T>(path: string, init?: RequestInit): Promise<T> {
   const cookieStore = await cookies();
@@ -15,16 +18,16 @@ export async function fetchWithAuth<T>(path: string, init?: RequestInit): Promis
 
   const url = `${protocol}://${host}${path}`;
 
-  let fetchHeaders: HeadersInit = {
-    ...init?.headers,
-    'content-type': 'application/json',
-  };
-  if (userCookie?.value) {
-    fetchHeaders = {
-      ...headers,
-      authorization: `Bearer ${userCookie.value}`,
-    };
+  if (!userCookie?.value) {
+    redirect('/connect/default-user');
   }
+
+  const fetchHeaders: HeadersInit = {
+    ...init?.headers,
+    ...headers,
+    'content-type': 'application/json',
+    authorization: `Bearer ${userCookie.value}`,
+  };
 
   const response = await fetch(url, {
     ...init,
@@ -36,4 +39,15 @@ export async function fetchWithAuth<T>(path: string, init?: RequestInit): Promis
   }
 
   return response.json() as Promise<T>;
+}
+
+export async function getCurrentUserFromCookie(): Promise<User | undefined> {
+  const cookieStore = await cookies();
+  const userCookie = cookieStore.get(USER_COOKIE_NAME);
+
+  if (userCookie?.value) {
+    return decodeJwt(userCookie.value);
+  }
+
+  return undefined;
 }

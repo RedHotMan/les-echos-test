@@ -5,7 +5,7 @@ export interface Newsletter {
   imageUrl: string;
   title: string;
   description: string;
-  isSubscribed: boolean;
+  isAccessible: boolean;
 }
 
 export type NewslettersResponse = {

@@ -25,8 +25,8 @@ export function CardGrid({ title, cards }: CardGridProps) {
           lg:grid-cols-3
         `}
       >
-        {cards.map(({ title, description, imageUrl, isSubscribed }) => (
-          <Card key={title} imageUrl={imageUrl} title={title} description={description} isSubscribed={isSubscribed} />
+        {cards.map(({ title, description, imageUrl, isAccessible }) => (
+          <Card key={title} imageUrl={imageUrl} title={title} description={description} isAccessible={isAccessible} />
         ))}
       </div>
     </section>

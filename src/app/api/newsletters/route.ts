@@ -3,6 +3,14 @@ import { decodeJwt } from 'jose';
 import { NEWSLETTER_ITEMS } from '@/mocks/newsletters';
 import { NewslettersResponse, User } from '@/types';
 
+const isNewsletterAccessible = (currentUser: User | undefined, newsletterSubscriptions: string[]): boolean => {
+  if (newsletterSubscriptions.length === 0) {
+    return true;
+  }
+
+  return currentUser?.subscriptions?.some((subscription) => newsletterSubscriptions.includes(subscription)) ?? false;
+};
+
 export async function GET(req: Request) {
   const authHeader = req.headers.get('authorization');
 
@@ -19,7 +27,7 @@ export async function GET(req: Request) {
         title,
         description,
         imageUrl,
-        isSubscribed: currentUser?.subscriptions?.some((subscription) => subscriptions.includes(subscription)) ?? false,
+        isAccessible: isNewsletterAccessible(currentUser, subscriptions),
       })) ?? [],
   }));
 
